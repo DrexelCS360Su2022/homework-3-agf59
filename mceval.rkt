@@ -306,6 +306,15 @@
         (list 'cons cons)
         (list 'null? null?)
 ;;      more primitives
+		  (list '+ +)
+		  (list '* *)
+		  (list '- -)
+		  (list '/ /)
+		  (list '< <)
+		  (list '<= <=)
+		  (list '= =)
+		  (list '>= >=)
+		  (list '> >)
         ))
 
 (define (primitive-procedure-names)
