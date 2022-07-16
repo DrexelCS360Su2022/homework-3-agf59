@@ -30,6 +30,8 @@
         ((begin? exp)
          (eval-sequence (begin-actions exp) env))
         ((cond? exp) (mceval (cond->if exp) env))
+		  ((and? exp) (eval-and (cdr exp) env))
+		  ((or? exp) (eval-or (cdr exp) env))
         ((application? exp)
          (mcapply (mceval (operator exp) env)
                   (list-of-values (operands exp) env)))
@@ -61,6 +63,20 @@
   (if (true? (mceval (if-predicate exp) env))
       (mceval (if-consequent exp) env)
       (mceval (if-alternative exp) env)))
+
+(define (eval-and exp env)
+  (if (null? exp)
+  		true
+		(if (true? (car exp))
+			(eval-and (cdr exp) env)
+			false)))
+
+(define (eval-or exp env)
+  (if (null? exp)
+  		false
+		(if (false? (car exp))
+			(eval-or (cdr exp) env)
+			true)))
 
 (define (eval-sequence exps env)
   (cond ((last-exp? exps) (mceval (first-exp exps) env))
@@ -145,6 +161,10 @@
 (define (make-if predicate consequent alternative)
   (list 'if predicate consequent alternative))
 
+
+(define (and? exp) (tagged-list? exp 'and))
+
+(define (or? exp) (tagged-list? exp 'or))
 
 (define (begin? exp) (tagged-list? exp 'begin))
 
