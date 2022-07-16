@@ -13,6 +13,6 @@ The hardest part about this problem was figuring out how to implement 'error.
 
 Problem 2:
 
-Problem 3:
+Problem 3: 0m
 
-Problem 4:
+Problem 4: 0m
