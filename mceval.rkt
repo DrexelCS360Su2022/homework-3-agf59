@@ -67,16 +67,16 @@
 (define (eval-and exp env)
   (if (null? exp)
   		true
-		(if (true? (car exp))
+		(if (and (true? (mceval (car exp) env)) (not (null? (cdr exp))))
 			(eval-and (cdr exp) env)
-			false)))
+			(mceval (car exp) env))))
 
 (define (eval-or exp env)
   (if (null? exp)
   		false
-		(if (false? (car exp))
+		(if (and (false? (mceval (car exp) env)) (not (null? (cdr exp))))
 			(eval-or (cdr exp) env)
-			true)))
+			(mceval (car exp) env))))
 
 (define (eval-sequence exps env)
   (cond ((last-exp? exps) (mceval (first-exp exps) env))

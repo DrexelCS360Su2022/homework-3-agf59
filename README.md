@@ -11,8 +11,8 @@ Please let us know how much time you spent on each problem. You may enter time u
 Problem 1: 4m
 The hardest part about this problem was figuring out how to implement 'error, which I haven't done as of yet.
 
-Problem 2: 300m
-This problem has been giving me a lot of trouble and I am not finished yet. My primary cause for concern is simply that I cannot figure out why it sometimes evaluates false positives on true?
+Problem 2: 335m
+This problem gave me a lot of trouble. Frankly, I just didn't understand the inner workings of the mcevaluator well enough going into it. I persevered, though, and managed to figure it out almost entirely on my own with some help from a TA. 
 
 Problem 3: 0m
 
