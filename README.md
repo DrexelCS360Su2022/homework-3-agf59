@@ -14,6 +14,7 @@ The hardest part about this problem was figuring out how to implement 'error, wh
 Problem 2: 335m
 This problem gave me a lot of trouble. Frankly, I just didn't understand the inner workings of the mcevaluator well enough going into it. I persevered, though, and managed to figure it out almost entirely on my own with some help from a TA. 
 
-Problem 3: 0m
+Problem 3: 128m
+I haven't quite figured this problem out at the current time of writing. I have extended the environment, then attempted to have the MC evaluator evaluate the body of the let function within this new environment. This keeps creating issues, and I have no idea what I need to be doing differently
 
 Problem 4: 0m

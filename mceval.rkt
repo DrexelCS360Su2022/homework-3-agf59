@@ -23,7 +23,7 @@
         ((assignment? exp) (eval-assignment exp env))
         ((definition? exp) (eval-definition exp env))
         ((if? exp) (eval-if exp env))
-        ((let? exp) (eval-let (cdr exp) env))
+        ((let? exp) (eval-let exp env))
         ((lambda? exp)
          (make-procedure (lambda-parameters exp)
                          (lambda-body exp)
@@ -99,7 +99,7 @@
   'ok)
 
 (define (eval-let exp env)
-  (mceval (let-body exp) (extend-environment (let-vars exp) (let-vals exp) env)))
+  (mceval (car (let-body exp)) (extend-environment (let-vars exp) (let-vals exp) env)))
 
 ;;;SECTION 4.1.2
 
@@ -232,7 +232,7 @@
 
 (define (let-vars exp) (map car (let-bindings exp)))
 
-(define (let-vals exp) (map cadr (let-bindings exp)))
+(define (let-vals exp) (map cadr (let-bindings exp) ))
 
 (define (let-body exp) (cddr exp))
 
