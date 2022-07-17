@@ -23,6 +23,7 @@
         ((assignment? exp) (eval-assignment exp env))
         ((definition? exp) (eval-definition exp env))
         ((if? exp) (eval-if exp env))
+        ((let? exp) (eval-let (cdr exp) env))
         ((lambda? exp)
          (make-procedure (lambda-parameters exp)
                          (lambda-body exp)
@@ -32,10 +33,12 @@
         ((cond? exp) (mceval (cond->if exp) env))
 		  ((and? exp) (eval-and (cdr exp) env))
 		  ((or? exp) (eval-or (cdr exp) env))
+		  ((error? exp) (error "Metacircular Interpreter Aborted"))
         ((application? exp)
          (mcapply (mceval (operator exp) env)
                   (list-of-values (operands exp) env)))
-        (else
+
+		  (else
          (error "Unknown expression type -- EVAL" exp))))
 
 (define (mcapply procedure arguments)
@@ -94,6 +97,9 @@
                     (mceval (definition-value exp) env)
                     env)
   'ok)
+
+(define (eval-let exp env)
+  (mceval (let-body exp) (extend-environment (let-vars exp) (let-vals exp) env)))
 
 ;;;SECTION 4.1.2
 
@@ -161,10 +167,11 @@
 (define (make-if predicate consequent alternative)
   (list 'if predicate consequent alternative))
 
-
 (define (and? exp) (tagged-list? exp 'and))
 
 (define (or? exp) (tagged-list? exp 'or))
+
+(define (error? exp) (tagged-list? exp 'error))
 
 (define (begin? exp) (tagged-list? exp 'begin))
 
@@ -218,6 +225,16 @@
             (make-if (cond-predicate first)
                      (sequence->exp (cond-actions first))
                      (expand-clauses rest))))))
+
+(define (let? exp) (tagged-list? exp 'let))
+
+(define (let-bindings exp) (cadr exp))
+
+(define (let-vars exp) (map car (let-bindings exp)))
+
+(define (let-vals exp) (map cadr (let-bindings exp)))
+
+(define (let-body exp) (cddr exp))
 
 ;;;SECTION 4.1.3
 
