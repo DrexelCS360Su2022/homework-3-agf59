@@ -99,7 +99,7 @@
   'ok)
 
 (define (eval-let exp env)
-  (mceval (car (let-body exp)) (extend-environment (let-vars exp) (let-vals exp) env)))
+  (mceval (car (let-body exp)) (extend-environment (let-vars exp) (let-vals exp env) env)))
 
 ;;;SECTION 4.1.2
 
@@ -232,7 +232,7 @@
 
 (define (let-vars exp) (map car (let-bindings exp)))
 
-(define (let-vals exp) (map cadr (let-bindings exp) ))
+(define (let-vals exp env) (map (lambda (x) (mceval x env)) (map cadr (let-bindings exp)))) ;hacky way to get the values of every variable to evaluate before we try to use them in the body
 
 (define (let-body exp) (cddr exp))
 
