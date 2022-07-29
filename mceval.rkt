@@ -1,4 +1,4 @@
-#lang racket/base
+#lang racket
 (require (except-in racket force delay))
 (require racket/mpair)
 
@@ -24,6 +24,8 @@
         ((definition? exp) (eval-definition exp env))
         ((if? exp) (eval-if exp env))
         ((let? exp) (eval-let exp env))
+		  ((delay? exp) (eval-delay exp env))
+		  ((force? exp) (mceval (cdr exp) env))
         ((lambda? exp)
          (make-procedure (lambda-parameters exp)
                          (lambda-body exp)
@@ -99,7 +101,24 @@
   'ok)
 
 (define (eval-let exp env)
-  (mceval (car (let-body exp)) (extend-environment (let-vars exp) (let-vals exp env) env)))
+  (eval-sequence (let-body exp)
+  			 (extend-environment
+			 		(let-vars exp)
+					(list-of-values (let-vals exp env) env) env)))
+
+(define (memo-proc proc) ;taken from lecture notes
+	(let ((already-run? false)
+			(result null))
+		(lambda ()
+			(if (not already-run?)
+				(begin	
+					(set! result (proc))
+					(set! already-run? true)
+					result)
+				result))))
+
+(define (eval-delay exp env)
+	(make-procedure '() (cdr exp) env))
 
 ;;;SECTION 4.1.2
 
@@ -226,13 +245,17 @@
                      (sequence->exp (cond-actions first))
                      (expand-clauses rest))))))
 
+(define (delay? exp) (tagged-list? exp 'delay))
+
+(define (force? exp) (tagged-list? exp 'force))
+
 (define (let? exp) (tagged-list? exp 'let))
 
 (define (let-bindings exp) (cadr exp))
 
 (define (let-vars exp) (map car (let-bindings exp)))
 
-(define (let-vals exp env) (map (lambda (x) (mceval x env)) (map cadr (let-bindings exp)))) ;hacky way to get the values of every variable to evaluate before we try to use them in the body
+(define (let-vals exp env) (map cadr (let-bindings exp)))
 
 (define (let-body exp) (cddr exp))
 

@@ -17,5 +17,5 @@ This problem gave me a lot of trouble. Frankly, I just didn't understand the inn
 Problem 3: 168m
 I haven't quite figured this problem out at the current time of writing. I have extended the environment, then attempted to have the MC evaluator evaluate the body of the let function within this new environment. This keeps creating issues, and I have no idea what I need to be doing differently. I have decided to give up on this. 
 
-Problem 4: 0m
-I did not attempt this problem.
+Problem 4: 160m
+This problem I could not get the memoization function to work, but I was able to pass all the tests with a rather simple implementation of lambda in my delay function. Most of my time was spent wasted on the memo function.
